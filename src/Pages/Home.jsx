@@ -1,8 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import heroImg from "../assets/Hero-2.png";
 import { TfiMouse } from "react-icons/tfi";
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  console.log(user)
   return (
     <div className="max-w-screen-2xl mx-auto px-4 py-2  lg:py-20 flex flex-col lg:flex-row gap-10">
       <div className="flex-1 pr-10">

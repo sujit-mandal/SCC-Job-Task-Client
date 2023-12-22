@@ -1,13 +1,13 @@
 
+import { Outlet } from "react-router-dom";
 import Menubar from "../Components/Menubar";
-import Home from "../Pages/Home";
 
 
 const Mainlayout = () => {
     return (
         <div className="font-poppins">
             <Menubar></Menubar>
-            <Home></Home>
+            <Outlet></Outlet>
         </div>
     );
 };

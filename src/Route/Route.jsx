@@ -3,6 +3,8 @@ import Mainlayout from "../Mainlayout/Mainlayout";
 import Home from "../Pages/Home";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
+import Userlayout from "../Mainlayout/Userlayout";
+import Task from "../Components/Task";
 
 const route = createBrowserRouter([
   {
@@ -12,6 +14,16 @@ const route = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <Userlayout></Userlayout>,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Task></Task>,
       },
     ],
   },
