@@ -40,7 +40,7 @@ const Menubar = () => {
         </NavLink>
       )}
       <NavLink
-        to="/price"
+        to="/faq"
         className={({ isActive, isPending }) =>
           isPending ? "pending" : isActive ? "active" : ""
         }
@@ -56,7 +56,7 @@ const Menubar = () => {
         Features
       </NavLink>
       <NavLink
-        to="/aboutus"
+        to="/about"
         className={({ isActive, isPending }) =>
           isPending ? "pending" : isActive ? "active" : ""
         }
