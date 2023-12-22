@@ -4,6 +4,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import logo from '../assets/logo.png'
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         toast.success("Logged in successfully.");
-        navigate("/");
+        navigate("/dashboard");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -34,11 +35,11 @@ const Login = () => {
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
               <img
-                src="https://drive.google.com/uc?export=view&id=1MFiKAExRFF0-2YNpAZzIu1Sh52J8r16v"
-                className="w-mx-auto"
+                src={logo}
+                className="mx-auto"
               />
             </div>
-            <div className="mt-12 flex flex-col items-center">
+            <div className="mt-10 flex flex-col items-center">
               <div className="w-full flex-1 mt-8">
                 <SocialLogin></SocialLogin>
                 <div className="mx-auto max-w-xs">
@@ -55,7 +56,7 @@ const Login = () => {
                       placeholder="Password"
                       {...register("password", { required: true })}
                     />
-                    <button className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                    <button className="mt-5 tracking-wide font-semibold bg-[#2ED7D8] text-white-500 w-full py-4 rounded-lg hover:bg-[#097878] transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                       <svg
                         className="w-6 h-6 -ml-2"
                         fill="none"

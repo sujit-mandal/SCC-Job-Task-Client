@@ -3,12 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GrClose } from "react-icons/gr";
 import { AuthContext } from "../Provider/AuthProvider";
+import logo from "../assets/logo.png";
 const Userdashboard = () => {
+  const { user } = useContext(AuthContext);
   const [isAsideOpen, setIsAsideOpen] = useState(false);
   const navigate = useNavigate();
   const handleMobileMenuClick = () => {
     setIsAsideOpen(!isAsideOpen);
   };
+  console.log(user);
   const { logOut } = useContext(AuthContext);
   const handleLogOut = () => {
     logOut()
@@ -30,24 +33,20 @@ const Userdashboard = () => {
         <div>
           <div className="-mx-6 px-6 py-4">
             <a href="#" title="home">
-              <img
-                src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg"
-                className="w-32"
-                alt="tailus logo"
-              />
+              <img src={logo} className="w-32" alt="tailus logo" />
             </a>
           </div>
 
           <div className="mt-8 text-center">
             <img
-              src="https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp"
+              src={user?.photoURL}
               alt=""
               className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
             />
             <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-              Cynthia J. Watts
+              {user?.displayName}
             </h5>
-            <span className="hidden text-gray-400 lg:block">Admin</span>
+            <span className="hidden text-gray-400 lg:block">User</span>
           </div>
 
           <ul className="space-y-2 tracking-wide mt-8">
@@ -144,10 +143,9 @@ const Userdashboard = () => {
       <div className="ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
         <div className="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
           <div className="px-6 flex items-center justify-between space-x-4 2xl:container">
-            <h5
-              hidden
-              className="text-2xl text-gray-600 font-medium lg:block"
-            ></h5>
+            <h5 hidden className="text-2xl text-gray-600 font-medium lg:block font-poppins">
+              Wellcome to Taskboard
+            .</h5>
             <button
               className="w-12 h-16 -mr-2 border-r lg:hidden"
               id="mobilemenu"

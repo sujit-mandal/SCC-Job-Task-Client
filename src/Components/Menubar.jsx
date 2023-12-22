@@ -7,7 +7,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
-
+import logo from "../assets/logo.png";
 const Menubar = () => {
   const [openNav, setOpenNav] = useState(false);
   const { user } = useContext(AuthContext);
@@ -45,7 +45,15 @@ const Menubar = () => {
           isPending ? "pending" : isActive ? "active" : ""
         }
       >
-        Pricing
+        How it works
+      </NavLink>
+      <NavLink
+        to="/features"
+        className={({ isActive, isPending }) =>
+          isPending ? "pending" : isActive ? "active" : ""
+        }
+      >
+        Features
       </NavLink>
       <NavLink
         to="/aboutus"
@@ -66,30 +74,32 @@ const Menubar = () => {
             href="#"
             className="mr-4 cursor-pointer py-1.5 font-medium"
           >
-            Material Tailwind
+            <img src={logo} alt="" />
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
-            <div className="flex items-center gap-x-1">
-              <Link to={"/login"}>
-                <Button
-                  variant="text"
-                  size="sm"
-                  className="hidden lg:inline-block"
-                >
-                  <span>Log In</span>
-                </Button>
-              </Link>
-              <Link to={"/signup"}>
-                <Button
-                  variant="gradient"
-                  size="sm"
-                  className="hidden lg:inline-block"
-                >
-                  <span>Sign in</span>
-                </Button>
-              </Link>
-            </div>
+            {!user && (
+              <div className="flex items-center gap-x-1">
+                <Link to={"/login"}>
+                  <Button
+                    variant="text"
+                    size="sm"
+                    className="hidden lg:inline-block"
+                  >
+                    <span>Log In</span>
+                  </Button>
+                </Link>
+                <Link to={"/signup"}>
+                  <Button
+                    variant="gradient"
+                    size="sm"
+                    className="hidden lg:inline-block"
+                  >
+                    <span>Sign in</span>
+                  </Button>
+                </Link>
+              </div>
+            )}
             <IconButton
               variant="text"
               className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"

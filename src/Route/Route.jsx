@@ -5,6 +5,7 @@ import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
 import Userlayout from "../Mainlayout/Userlayout";
 import Task from "../Components/Task";
+import Features from "../Pages/Features";
 
 const route = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const route = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+      },
+      {
+        path: "/features",
+        element: <Features></Features>,
       },
     ],
   },

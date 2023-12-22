@@ -1,10 +1,8 @@
 import { Dialog, Card, CardBody, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { AuthContext } from './../Provider/AuthProvider';
-const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
-  const {user} =useContext(AuthContext)
+const Updatetask = ({ task, handleOpen, open, handleClose, refetch }) => {
+  console.log(task);
   const {
     register,
     handleSubmit,
@@ -12,19 +10,19 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    const task = {
-      email: user?.email,
+    const updatedTask = {
       title: data.title,
       description: data.description,
       date: data.date,
       priority: data.priority,
-      status: "todo",
     };
-    axios.post("http://localhost:5000/add-task", task).then((response) => {
-      reset();
-      refetch();
-      handleClose();
-    });
+    axios
+      .patch(`http://localhost:5000/update-task/${task._id}`, {
+        updatedTask,
+      })
+      .then((res) => {
+        handleClose();
+      });
   };
   const handleCloseButton = () => {
     handleClose();
@@ -40,14 +38,14 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
         <Card className="mx-auto w-full ">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-              Add Task
+              Update Task
             </Typography>
             <Typography
               className="mb-3 font-normal"
               variant="paragraph"
               color="gray"
             >
-              Tackle your goals in daily doses...
+              Update your task without hassle..
             </Typography>
 
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,6 +58,7 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
                   type="text"
                   {...register("title", { required: true, maxLength: 80 })}
                   placeholder="Enter task title"
+                  defaultValue={task.title}
                 />
               </div>
               <div className="mb-4">
@@ -70,6 +69,7 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
                   className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your text here..."
                   rows="4"
+                  defaultValue={task.description}
                   {...register("description", {
                     required: true,
                     maxLength: 250,
@@ -84,6 +84,7 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
                 <input
                   className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="date"
+                  defaultValue={task.date}
                   {...register("date", { required: true })}
                   placeholder="Select a date"
                 />
@@ -96,6 +97,7 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
                 <select
                   className="shadow border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
                   {...register("priority", { required: true })}
+                  defaultValue={task.priority}
                 >
                   <option value="">Select a Level</option>
                   <option value="low">Low</option>
@@ -109,7 +111,7 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
                   className="bg-gradient-to-r from-cyan-700 to-cyan-400 text-white py-2 px-4 rounded hover:shadow-lg hover:shadow-cyan-800 focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Add Task
+                  Update Task
                 </button>
                 <button
                   className=" text-black border border-black py-2 px-4 rounded "
@@ -127,4 +129,4 @@ const Addtask = ({ handleOpen, open, handleClose, refetch }) => {
   );
 };
 
-export default Addtask;
+export default Updatetask;

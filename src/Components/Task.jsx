@@ -4,12 +4,15 @@ import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { LiaEdit } from "react-icons/lia";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Addtask from "./Addtask";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useDrag, useDrop } from "react-dnd";
+import Updatetask from "./Updatetask";
+import { AuthContext } from "../Provider/AuthProvider";
 const Task = () => {
+  const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -20,7 +23,7 @@ const Task = () => {
   const { data: tasks, refetch } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/tasks");
+      const res = await axios.get(`http://localhost:5000/tasks/${user?.email}`);
       return res.data;
     },
     staleTime: 5000,
@@ -43,11 +46,15 @@ const Task = () => {
           status={status}
           tasks={tasks}
           todos={todos}
+          refetch={refetch}
           inProgress={inProgress}
           closed={closed}
+          handleOpen={handleOpen}
+          open={open}
+          handleClose={handleClose}
         ></Section>
       ))}
-      <div className="flex justify-center mt-[40%]">
+      <div className="flex justify-center">
         <div className="">
           <button
             className="flex flex-col justify-center items-center gap-5 px-3 py-5 border-2 border-dashed border-[#2ED7D8] rounded-lg"
@@ -70,7 +77,7 @@ const Task = () => {
 
 export default Task;
 
-const Section = ({ status, todos, inProgress, closed }) => {
+const Section = ({ status, todos, inProgress, closed, refetch }) => {
   const queryClient = useQueryClient();
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "task",
@@ -99,7 +106,7 @@ const Section = ({ status, todos, inProgress, closed }) => {
   }
   const addItemToSection = (id) => {
     axios
-      .patch(`http://localhost:5000/update-task/${id}`, { status })
+      .patch(`http://localhost:5000/update-task-status/${id}`, { status })
       .then((res) => {
         queryClient.invalidateQueries("task");
       });
@@ -117,7 +124,7 @@ const Section = ({ status, todos, inProgress, closed }) => {
       ></Header>
       {tasksToMap?.length > 0 &&
         tasksToMap?.map((task) => (
-          <TaskCard key={task._id} task={task}></TaskCard>
+          <TaskCard key={task._id} task={task} refetch={refetch}></TaskCard>
         ))}
     </div>
   );
@@ -151,7 +158,10 @@ const Header = ({ text, bg, count, icon }) => {
     </div>
   );
 };
-const TaskCard = ({ task, tasks }) => {
+const TaskCard = ({ task, refetch }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task._id },
@@ -159,6 +169,17 @@ const TaskCard = ({ task, tasks }) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
+
+  const handleRemoveTask = (id) => {
+    axios.delete(`http://localhost:5000/delete-task/${id}`).then((res) => {
+      refetch();
+    });
+  };
+
+  // const handleUpdate = (task) => {
+  //   console.log("Update task: ", task);
+  //   onclick(handleOpen);
+  // };
   return (
     <div
       ref={drag}
@@ -169,9 +190,18 @@ const TaskCard = ({ task, tasks }) => {
       <p className="text-3xl ">{task.title}</p>
 
       <div className="flex items-center gap-3 text-2xl">
-        <LiaEdit></LiaEdit>
-        <IoIosRemoveCircleOutline></IoIosRemoveCircleOutline>
+        <LiaEdit onClick={() => handleOpen()}></LiaEdit>
+        <IoIosRemoveCircleOutline
+          onClick={() => handleRemoveTask(task._id)}
+        ></IoIosRemoveCircleOutline>
       </div>
+      <Updatetask
+        task={task}
+        handleOpen={handleOpen}
+        open={open}
+        handleClose={handleClose}
+        refetch={refetch}
+      />
     </div>
   );
 };
